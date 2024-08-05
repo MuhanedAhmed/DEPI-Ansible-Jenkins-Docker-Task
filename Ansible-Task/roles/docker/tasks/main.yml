@@ -1,0 +1,26 @@
+---
+# Installing Docker Package
+- name: Install_Docker
+  yum:
+    name: docker
+    state: latest
+    update_cache: yes
+  register: check_docker
+
+
+# Adding the ec2-user to 'docker' group
+- name: Add_user
+  ansible.builtin.user:
+    name: ec2-user
+    groups: docker
+    append: yes
+  when: check_docker.changed == true
+
+
+# Make sure docker is running and starting on every boot.
+- name: Enable_Docker
+  ansible.builtin.systemd_service:
+    state: started
+    name: docker
+    enabled: true
+  when: check_docker.changed == true

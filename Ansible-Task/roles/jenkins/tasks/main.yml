@@ -1,0 +1,34 @@
+---
+# Downloading necessary files
+- name: Add_Jenkins_Repo
+  ansible.builtin.shell:
+    cmd: |
+      sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+      sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+      
+
+# Installing Java
+- name: Install_Java
+  ansible.builtin.shell:
+    cmd: |
+      sudo dnf install java-17-amazon-corretto -y
+
+
+
+# Installing Jenkins Package
+- name: Install_Jenkins
+  yum:
+    name: jenkins
+    state: latest
+    update_cache: yes
+  register: check_jenkins
+
+
+
+# Make sure jenkins is running and starting on every boot.
+- name: Enable_Jenkins
+  ansible.builtin.systemd_service:
+    state: started
+    name: jenkins
+    enabled: true
+  when: check_jenkins.changed == true

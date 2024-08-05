@@ -1,0 +1,9 @@
+- name: install jenkins and docker on my remote servers
+  hosts: docker-jenkins-task
+  gather_facts: true
+  roles:
+    - role: docker
+      tags: docker
+
+    - role: jenkins
+      tags: jenkins
