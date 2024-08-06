@@ -8,7 +8,7 @@ pipeline{
 
           steps{
 
-            sh "docker build -t mohanedahmed/depi-task:v${env.BUILD_NUMBER} ./../Docker-Task/"
+            sh "docker build -t mohanedahmed/depi-task:v${env.BUILD_NUMBER} ./Docker-Task/"
             withCredentials([usernamePassword(credentialsId: 'myDockerHub', passwordVariable: 'pass', usernameVariable: 'user')]) {
                 sh "docker login -u $user -p $pass"
             }
